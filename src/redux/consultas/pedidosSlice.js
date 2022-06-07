@@ -45,8 +45,11 @@ export const consultaPedidosSlice = createSlice({
 		setPagina: (state, action) => {
 			let skip = ((action.payload - 1) * state.limite);
 			state.skip = skip;
+		},
+		setFiltro: (state, action) => {
+			state.skip = 0;
+			state.filtro = action.payload;
 		}
-
 	},
 
 	extraReducers: (builder) => {
@@ -76,6 +79,6 @@ export const selectFiltro = createSelector([_selectFiltro], (filtro) => {
 })
 
 
-export const { setLimite, setVista, setPagina } = consultaPedidosSlice.actions;
+export const { setLimite, setVista, setPagina, setFiltro } = consultaPedidosSlice.actions;
 
 export default consultaPedidosSlice.reducer;

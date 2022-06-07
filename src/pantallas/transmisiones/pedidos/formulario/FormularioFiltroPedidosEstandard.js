@@ -1,6 +1,6 @@
 import Grid from "@mui/material/Grid";
 
-
+// SUBCOMPONENTES
 import CodigoCliente from "./CodigosCliente";
 import CodigoSolicitante from "./CodigoSolicitante";
 // import DatosPedido from "./DatosPedido";
@@ -11,8 +11,6 @@ import RangoFechas from "./RangoFechas";
 
 
 export default function FormularioFiltroPedidosEstandard({ refFiltro }) {
-
-
 
 	return <Grid container spacing={2} alignItems="flex-start">
 		<Grid item xs={12} xl={6}>

@@ -1,17 +1,29 @@
 import React from 'react';
-import clone from 'lodash';
+
+// UTILIDADES
+import { EJSON } from 'bson';
+import _ from 'lodash';
 
 // MUI
-import { Container, Typography, IconButton, Button, Dialog, AppBar, Toolbar, Slide } from '@mui/material';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Slide from '@mui/material/Slide';
 
 // MUI-ICONS
 import CloseIcon from '@mui/icons-material/Close';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 
+// REDUX
+import { useDispatch, useSelector } from 'react-redux';
+import { consultarPedidos, selectFiltro, setFiltro } from 'redux/consultas/pedidosSlice';
+
 // SUBCOMPONENTES
 import FormularioFiltroPedidosEstandard from './formulario/FormularioFiltroPedidosEstandard';
-import { useSelector } from 'react-redux';
-import { selectFiltro } from 'redux/consultas/pedidosSlice';
 
 
 
@@ -23,30 +35,32 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function BotonFiltrosPedido() {
 
+	const dispatch = useDispatch();
 	const [dialogoAbierto, setDialogoAbierto] = React.useState(false);
 	let filtro = useSelector(selectFiltro);
 
 	const refFiltro = React.useRef(null);
 
-	React.useEffect( () => {
-		refFiltro.current = clone(filtro);
-	}, [filtro])
-	
-
 	const abrirDialogo = () => {
+		refFiltro.current = _.cloneDeep(filtro);
 		setDialogoAbierto(true);
 	};
 
 	const descartarCambiosYCerrarDialogo = () => {
+		refFiltro.current = _.cloneDeep(filtro);
+		console.log('RESETEADO EL FILTRO', refFiltro.current)
 		setDialogoAbierto(false);
 	};
 
 	const aplicarCambiosYCerrarDialogo = () => {
+		console.log('APLICAMOS CAMBIOS', refFiltro.current);
+		dispatch(setFiltro(EJSON.serialize(refFiltro.current)));
+		dispatch(consultarPedidos());
 		setDialogoAbierto(false);
 	}
 
 	const resetearFormulario = () => {
-
+		refFiltro.current = _.cloneDeep(filtro);
 	}
 
 	return (<>

@@ -1,5 +1,7 @@
-import { useCallback, useState } from "react";
-import { Autocomplete, Chip, TextField } from "@mui/material";
+import React from "react";
+import Autocomplete from "@mui/material/Autocomplete";
+import Chip from "@mui/material/Chip";
+import TextField from "@mui/material/TextField";
 
 
 export const ControlTextoChip = ({
@@ -8,6 +10,7 @@ export const ControlTextoChip = ({
 	regexValidacion,
 	regexParticionado,
 	caracteresDeEscape,
+	eliminarDuplicados,
 	label,
 	placeholder,
 	helperText,
@@ -18,34 +21,40 @@ export const ControlTextoChip = ({
 	if (!caracteresDeEscape) caracteresDeEscape = [' ', 'Enter', 'Tab']
 	if (!regexParticionado) regexParticionado = /[\s\r\n\t]+/
 
-	let [open, setOpen] = useState(false);
+	let [open, setOpen] = React.useState(false);
+	let [inputValue, setInputValue] = React.useState('');
 
-	const enTeclaPresionada = useCallback(event => {
+	const enTeclaPresionada = React.useCallback(event => {
 		if (!opcionesFijas && caracteresDeEscape.includes(event.key)) {
 			event.preventDefault();
 			event.stopPropagation();
 			let valorInput = event.target?.value?.trim() || '';
 			if (valorInput.length > 0) {
 				let valoresNuevos = valorInput.split(regexParticionado).map(valor => valor);
-				if (regexValidacion) valoresNuevos = valoresNuevos.filter(valor => regexValidacion.test(valor) )
-				
-				onChange([...valor, ...valoresNuevos]);
+				if (regexValidacion) valoresNuevos = valoresNuevos.filter(valor => regexValidacion.test(valor))
+				let nuevoArray = [...valor, ...valoresNuevos]
+				if (eliminarDuplicados) nuevoArray = [...new Set(nuevoArray.map(e => e?.toString()))];
+				onChange(nuevoArray);
+				setInputValue('');
 			}
 		}
-	}, [valor, onChange, regexParticionado, caracteresDeEscape, opcionesFijas, regexValidacion]);
+	}, [valor, onChange, regexParticionado, caracteresDeEscape, opcionesFijas, regexValidacion, eliminarDuplicados]);
 
-	const enPerdidaDeFoco = useCallback(event => {
+	const enPerdidaDeFoco = React.useCallback(event => {
 
 		if (!opcionesFijas) {
 			let valorInput = event.target?.value?.trim() || '';
 			if (valorInput.length > 0) {
 				let valoresNuevos = valorInput.split(regexParticionado).map(valor => valor);
-				onChange([...valor, ...valoresNuevos]);
+				let nuevoArray = [...valor, ...valoresNuevos]
+				if (eliminarDuplicados) nuevoArray = [...new Set(nuevoArray.map(e => e?.toString()))];
+				onChange(nuevoArray);
+				setInputValue('');
 			}
 		}
 		setOpen(false)
 
-	}, [valor, onChange, regexParticionado, setOpen, opcionesFijas]);
+	}, [valor, onChange, regexParticionado, setOpen, opcionesFijas, eliminarDuplicados]);
 
 
 
@@ -56,6 +65,8 @@ export const ControlTextoChip = ({
 		onClose={() => setOpen(false)}
 		disableCloseOnSelect
 		filterSelectedOptions
+		inputValue={inputValue}
+		onInputChange={(e, valor) => setInputValue(valor)}
 		multiple
 		freeSolo={!opcionesFijas}
 		defaultValue={[]}
@@ -72,6 +83,7 @@ export const ControlTextoChip = ({
 						color='primary'
 						label={option}
 						variant="outlined"
+						onClick={(e) => setInputValue(option)}
 						{...getTagProps({ index })}
 					/>
 				}
@@ -81,7 +93,9 @@ export const ControlTextoChip = ({
 					color={ok ? 'primary' : 'error'}
 					label={option}
 					variant="outlined"
+					onClick={(e) => setInputValue(option)}
 					{...getTagProps({ index })}
+
 				/>
 			})
 		}}

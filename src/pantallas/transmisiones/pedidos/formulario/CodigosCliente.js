@@ -19,6 +19,7 @@ export const CodigoCliente = ({ refFiltro }) => {
 
 	const nodoCodigoCliente = refFiltro?.current?.['pedido.codigoCliente'];
 	const nodoPuntoEntrega = refFiltro?.current?.['pedido.puntoEntrega'];
+
 	let modoFiltroActual = MODOS[0].id;
 	let clientesSeleccionados = [];
 	if (nodoCodigoCliente) {
@@ -43,15 +44,16 @@ export const CodigoCliente = ({ refFiltro }) => {
 	}
 
 	useEffect(() => {
+
 		if (clientes.length && modoFiltro) {
 
 			refFiltro.current['pedido.codigoCliente'] = { [modoFiltro]: [] };
 			refFiltro.current['pedido.puntoEntrega'] = { [modoFiltro]: [] };
-			clientes.forEach(cliente => {
 
+			clientes.forEach(cliente => {
 				if (/^PT[0-9]{10}/.test(cliente)) { // Punto de entrega
 					refFiltro.current['pedido.puntoEntrega'][modoFiltro].push(cliente);
-				} else { // Cliente "integer"
+				} else { // Cliente "integer" de 5 dígitos
 					let clienteNumerico = parseInt(cliente?.substr?.(-5) || cliente);
 					if (clienteNumerico)
 						refFiltro.current['pedido.codigoCliente'][modoFiltro].push(clienteNumerico);
@@ -78,6 +80,7 @@ export const CodigoCliente = ({ refFiltro }) => {
 		<ControlTextoChip
 			regexValidacion={/^[0-9]{1,10}$|^PT[0-9]{10}$/i}
 			regexParticionado={/[\s\r\n\t,-.]+/}
+			eliminarDuplicados
 			valor={clientes}
 			onChange={cambiaCliente}
 			label="Códigos de cliente"
