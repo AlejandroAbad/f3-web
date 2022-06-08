@@ -2,15 +2,14 @@ import './RangoFechas.css';
 
 import React from "react";
 
+// MUI
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 
-
+// DATE RANGE PICKER
+import { DateRangePicker } from 'react-date-range';
 import { es } from 'react-date-range/dist/locale';
 import { addDays, addMonths, addWeeks, endOfDay, endOfMonth, endOfWeek, startOfDay, startOfMonth, startOfWeek } from "date-fns";
-
-import { DateRangePicker } from 'react-date-range';
-
 
 
 const generarRangos = () => {

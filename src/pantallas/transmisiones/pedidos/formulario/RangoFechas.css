@@ -8,6 +8,8 @@
 	user-select: none;
 }
 
+
+
 .rdrDateDisplay {
 	display: flex;
 	justify-content: space-between;
@@ -38,6 +40,7 @@
 	box-sizing: inherit;
 	display: flex;
 	justify-content: space-between;
+	margin-top: 0;
 }
 
 .rdrMonthAndYearPickers {
@@ -80,6 +83,8 @@
 
 .rdrWeekDays {
 	display: flex;
+	font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+	font-size: 0.9rem;
 }
 
 .rdrWeekDay {
@@ -91,11 +96,15 @@
 .rdrDays {
 	display: flex;
 	flex-wrap: wrap;
+	font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+	font-size: 0.9rem;
 }
 
 .rdrDateDisplayWrapper {}
 
-.rdrMonthName {}
+.rdrMonthName {
+	display: none;
+}
 
 .rdrInfiniteMonths {
 	overflow: auto;
@@ -114,11 +123,12 @@
 
 .rdrDateInput input {
 	outline: none;
+	font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+	font-size: 0.9rem;
 }
 
 .rdrDateInput .rdrWarning {
 	position: absolute;
-	font-size: 1.6em;
 	line-height: 1.6em;
 	top: 0;
 	right: .25em;
@@ -192,7 +202,10 @@
 	font-size: inherit;
 }
 
-.rdrStaticRangeLabel {}
+.rdrStaticRangeLabel {
+	font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+	font-size: 0.9rem;
+}
 
 .rdrInputRanges {}
 
@@ -208,43 +221,35 @@
 }
 
 .rdrDateDisplayWrapper{
-  background-color: #3f51b5;
+	border-bottom: 1px solid #eff2f7;
+	background: #eff2f7;
 }
 
 .rdrDateDisplay{
-  margin: 0.833em;
+	margin-bottom: 0.4em;
+	margin-top: 0.4em;
 }
 
 .rdrDateDisplayItem{
-  border-radius: 4px;
-  background-color: #ffffff;
   color: #000000;
-  border: 1px solid transparent;
 }
 
 .rdrDateDisplayItem input{
-    cursor: pointer;
-    height: 2.5em;
-    line-height: 2.5em;
+    height: 2em;
+    line-height: 2em;
     border: 0px;
     background: transparent;
-    width: 100%;
-    color: #7d888d;
-	
   }
 
 .rdrDateDisplayItemActive{
   border-color: currentColor;
 }
 
-.rdrDateDisplayItemActive input{
-    color: #3f51b5
-  }
+
 
 .rdrMonthAndYearWrapper {
   align-items: center;
-  height: 60px;
-  padding-top: 10px;
+  padding-top: 6px;
 }
 
 .rdrMonthAndYearPickers{
@@ -272,7 +277,9 @@
     }
 
 .rdrMonthPicker, .rdrYearPicker{
-  margin: 0 5px
+  margin: 0 5px;
+	font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+	font-size: 0.9rem;
 }
 
 .rdrNextPrevButton {
@@ -328,6 +335,8 @@
 
 .rdrMonths.rdrMonthsVertical .rdrMonth:first-child .rdrMonthName{
   display: none;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-size: 0.9rem;
 }
 
 .rdrWeekDay {
@@ -344,10 +353,9 @@
           user-select: none;
   border: 0;
   padding: 0;
-  line-height: 3.000em;
-  height: 3.000em;
+  line-height: 2.300em;
+  height: 2.300em;
   text-align: center;
-  color: #1d2429
 }
 
 .rdrDay:focus {
@@ -362,8 +370,8 @@
   right: 0;
   top: 0;
   bottom: 0;
-  top: 5px;
-  bottom: 5px;
+  top: 2px;
+  bottom: 2px;
   display: flex;
   align-items: center;
   justify-content: center;

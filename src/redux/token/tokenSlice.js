@@ -20,7 +20,6 @@ export const solicitarTokenObservador = createAsyncThunk('token/solicitarToken',
 	async (_, redux) => {
 		try {
 			let respuesta = await API(redux).monitor.obtenerTokenObservador();
-			console.log(respuesta)
 			return redux.fulfillWithValue(respuesta);
 		} catch (error) {
 			let mensaje = API.generarErrorFetch(error);

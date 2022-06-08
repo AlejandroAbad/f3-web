@@ -48,12 +48,10 @@ export default function BotonFiltrosPedido() {
 
 	const descartarCambiosYCerrarDialogo = () => {
 		refFiltro.current = _.cloneDeep(filtro);
-		console.log('RESETEADO EL FILTRO', refFiltro.current)
 		setDialogoAbierto(false);
 	};
 
 	const aplicarCambiosYCerrarDialogo = () => {
-		console.log('APLICAMOS CAMBIOS', refFiltro.current);
 		dispatch(setFiltro(EJSON.serialize(refFiltro.current)));
 		dispatch(consultarPedidos());
 		setDialogoAbierto(false);
@@ -69,7 +67,7 @@ export default function BotonFiltrosPedido() {
 		</Button>
 
 		<Dialog fullScreen open={dialogoAbierto} onClose={descartarCambiosYCerrarDialogo} TransitionComponent={Transition} >
-			<AppBar sx={{ position: 'relative' }}>
+			<AppBar sx={{ position: 'fixed' }}>
 				<Toolbar>
 					<IconButton edge="start" color="inherit" onClick={descartarCambiosYCerrarDialogo}>
 						<CloseIcon />
@@ -86,7 +84,7 @@ export default function BotonFiltrosPedido() {
 				</Toolbar>
 			</AppBar>
 
-			<Container maxWidth="xl" sx={{ mt: 0, pl: 1, pr: 8, py: 4 }}>
+			<Container maxWidth="xl" sx={{ mt: 6, pl: 1, pr: 8, py: 4 }}>
 				<FormularioFiltroPedidosEstandard refFiltro={refFiltro} />
 			</Container>
 		</Dialog>

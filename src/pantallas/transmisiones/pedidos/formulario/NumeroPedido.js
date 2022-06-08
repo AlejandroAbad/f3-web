@@ -1,16 +1,29 @@
-import { useEffect, useState } from "react";
-import { FormControl, Grid, InputLabel, MenuItem, Select, Typography } from "@mui/material"
+import React from "react";
+import { ObjectId } from "bson";
+
+// MUI
+import FormControl from "@mui/material/FormControl"
+import Grid from "@mui/material/Grid"
+import InputLabel from "@mui/material/InputLabel"
+import MenuItem from "@mui/material/MenuItem"
+import Select from "@mui/material/Select"
+import Typography from "@mui/material/Typography"
+
+// MUI-ICONS
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import PauseCircleOutlineIcon from "@mui/icons-material/PauseCircleOutline";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+
+// SUBCOMPONENTES
+import BoxFiltro from "./BoxFiltro";
 import { ControlTextoChip } from "common/componentes/ControlTextoChip";
 import ControlModoFiltro, { obtenerModoDeFiltro } from "common/componentes/ControlModoFiltro";
-import { AddCircleOutline, PauseCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
-import BoxFiltro from "./BoxFiltro";
-import { ObjectId } from "bson";
 
 
 const MODOS = [
-	{ id: '$in', texto: 'Incluye', color: 'primary', icono: <AddCircleOutline /> },
-	{ id: '$nin', texto: 'NO incluye', color: 'error', icono: <RemoveCircleOutline /> },
-	{ id: '', texto: 'Filtro desactivado', color: 'inherit', icono: <PauseCircleOutline /> }
+	{ id: '$in', texto: 'Incluye', color: 'primary', icono: <AddCircleOutlineIcon /> },
+	{ id: '$nin', texto: 'NO incluye', color: 'error', icono: <RemoveCircleOutlineIcon /> },
+	{ id: '', texto: 'Filtro desactivado', color: 'inherit', icono: <PauseCircleOutlineIcon /> }
 ]
 
 const TIPOS = {
@@ -72,10 +85,10 @@ export const NumeroPedido = ({ refFiltro }) => {
 	}
 
 
-	const [seleccionActual, setSeleccionActual] = useState(numerosSeleccionados);
-	const [tipoNumeroPedido, setTipoNumeroPedido] = useState(tipoNumeroSeleccionado);
-	const [modoFiltro, setModoFiltro] = useState(modoFiltroActual);
-	useEffect(() => {
+	const [seleccionActual, setSeleccionActual] = React.useState(numerosSeleccionados);
+	const [tipoNumeroPedido, setTipoNumeroPedido] = React.useState(tipoNumeroSeleccionado);
+	const [modoFiltro, setModoFiltro] = React.useState(modoFiltroActual);
+	React.useEffect(() => {
 
 		for (let tipoNumero in TIPOS) {
 			delete refFiltro.current[TIPOS[tipoNumero].nodo]
@@ -92,8 +105,7 @@ export const NumeroPedido = ({ refFiltro }) => {
 				}).filter(numero => numero !== false)
 			};
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [seleccionActual, modoFiltro, tipoNumeroPedido])
+	}, [seleccionActual, modoFiltro, tipoNumeroPedido, refFiltro])
 
 
 	return <BoxFiltro relleno={seleccionActual?.length} modoFiltro={modoFiltro} >
@@ -120,6 +132,7 @@ export const NumeroPedido = ({ refFiltro }) => {
 				<ControlTextoChip
 					regexValidacion={TIPOS[tipoNumeroPedido].regexValidacion}
 					regexParticionado={TIPOS[tipoNumeroPedido].regexParticionado || /[\s\r\n\t,-.]+/}
+					eliminarDuplicados
 					valor={seleccionActual}
 					onChange={setSeleccionActual}
 					label={TIPOS[tipoNumeroPedido].label}

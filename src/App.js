@@ -16,11 +16,14 @@ import obtenerTema from 'navegacion/temas';
 
 // REDUX
 import { useSelector } from 'react-redux';
+import { CargaMaestros } from 'redux/maestros/maestrosSlice';
 
 // SUBCOMPONENTES
 import Pantallas from './pantallas/Pantallas';
 import BarraSuperior from 'navegacion/superior/BarraSuperior';
 import DrawerLateral from 'navegacion/lateral/DrawerLateral';
+
+
 
 
 
@@ -36,9 +39,9 @@ function App() {
 	const tema = useSelector(state => state.pantalla.tema)
 	const temita = React.useMemo(() => obtenerTema(tema), [tema]);
 
-
 	return (
 		<ThemeProvider theme={temita}>
+			<CargaMaestros />
 			<Router>
 				<div sx={{ display: 'flex' }}>
 					<CssBaseline />

@@ -4,7 +4,8 @@ import ControlModoFiltro, { obtenerModoDeFiltro } from "common/componentes/Contr
 import { AddCircleOutline, PauseCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
 import BoxFiltro from "./BoxFiltro";
 import { Grid, Typography } from "@mui/material";
-import ContextoMaestros from "contexto/contextoMaestros";
+import { selectMaestroAlmacenes } from "redux/maestros/maestrosSlice";
+import { useSelector } from "react-redux";
 
 
 const MODOS = [
@@ -61,7 +62,7 @@ const RUTA_NODO_TIPO = 'pedido.tipoPedido';
 
 export const DatosPedido = ({ refFiltro }) => {
 
-	const { maestroAlmacenes } = useContext(ContextoMaestros);
+	const maestroAlmacenes = useSelector(selectMaestroAlmacenes);
 	const nodoAlmacenes = refFiltro?.current?.[RUTA_NODO_ALMACEN];
 	let modoFiltroActualAlmacenes = MODOS[0].id;
 	let almacenesSeleccionados = [];

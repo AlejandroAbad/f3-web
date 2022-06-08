@@ -4,6 +4,7 @@ import { logout } from 'redux/token/tokenSlice';
 import { authenticate } from 'api/fedicom/authenticate';
 import { generarTokenPermanente, obtenerTokenObservador } from 'api/monitor/tokens';
 import { listadoPedidos } from './monitor/listadoPedidos';
+import { consultaMaestro } from './monitor/consultaMaestros';
 
 
 const API = function (redux) {
@@ -14,7 +15,8 @@ const API = function (redux) {
 		monitor: {
 			obtenerTokenObservador: () => obtenerTokenObservador(redux),
 			generarTokenPermanente: (usuario, dominio) => generarTokenPermanente(redux, usuario, dominio),
-			listadoPedidos: (filtro, proyeccion, orden, skip, limite) => listadoPedidos(redux, filtro, proyeccion, orden, skip, limite) 
+			listadoPedidos: (filtro, proyeccion, orden, skip, limite) => listadoPedidos(redux, filtro, proyeccion, orden, skip, limite),
+			consultaMaestro: (tipo, id) => consultaMaestro(redux, tipo, id)
 		},
 	}
 }
@@ -44,5 +46,11 @@ API.generarErrorFetch = (error) => {
 	else
 		return [{ codigo: 'NET-002', descripcion: `No se pudo alcanzar el servidor: ${error}` }]
 }
+
+API.esRespuestaErroresFedicom = (respuesta) => {
+	return Boolean(respuesta?.length > 0 && respuesta[0].codigo && respuesta[0].descripcion)
+}
+
+
 
 export default API;

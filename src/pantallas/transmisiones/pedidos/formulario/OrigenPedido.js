@@ -1,10 +1,20 @@
-import { useContext, useEffect, useState } from "react";
+import React from "react";
+
+// MUI
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+
+// MUI-ICONS
+import { AddCircleOutline, PauseCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
+
+// REDUX
+import { useSelector } from "react-redux";
+import { selectMaestroProgramas } from "redux/maestros/maestrosSlice";
+
+// SUBCOMPONENTES
+import BoxFiltro from "./BoxFiltro";
 import { ControlTextoChip } from "common/componentes/ControlTextoChip";
 import { ControlModoFiltro, obtenerModoDeFiltro } from "common/componentes/ControlModoFiltro";
-import { AddCircleOutline, PauseCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
-import BoxFiltro from "./BoxFiltro";
-import { Grid, Typography } from "@mui/material";
-import ContextoMaestros from "contexto/contextoMaestros";
 
 
 const MODOS = [
@@ -29,9 +39,9 @@ export const OrigenPedido = ({ refFiltro }) => {
 		modoFiltroActualIp = obtenerModoDeFiltro(nodoIps, MODOS) || MODOS[0].id
 		ipsSeleccionadas = ipsSeleccionadas.concat(Object.values(nodoIps)?.[0] || [])
 	}
-	const [seleccionIps, setSeleccionIps] = useState(ipsSeleccionadas);
-	const [modoFiltroIps, setModoFiltroIps] = useState(modoFiltroActualIp);
-	useEffect(() => {
+	const [seleccionIps, setSeleccionIps] = React.useState(ipsSeleccionadas);
+	const [modoFiltroIps, setModoFiltroIps] = React.useState(modoFiltroActualIp);
+	React.useEffect(() => {
 		if (seleccionIps.length && modoFiltroIps) {
 			refFiltro.current[RUTA_NODO_IP] = {
 				[modoFiltroIps]: seleccionIps
@@ -42,37 +52,37 @@ export const OrigenPedido = ({ refFiltro }) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [seleccionIps, modoFiltroIps])
 
+	let maestroProgramas = useSelector(selectMaestroProgramas);
+	console.log(maestroProgramas);
 
-	const { maestroProgramas } = useContext(ContextoMaestros);
 	const nodoPrograma = refFiltro?.current?.[RUTA_NODO_PROGRAMA];
 	let modoFiltroActualPrograma = MODOS[0].id;
 	let programasSelecccionados = [];
 	if (nodoPrograma) {
 		modoFiltroActualPrograma = obtenerModoDeFiltro(nodoPrograma, MODOS) || MODOS[0].id
-		if (maestroProgramas.datos) {
+		if (maestroProgramas.tieneDatos()) {
 			programasSelecccionados = Object.values(nodoPrograma)?.[0]?.map?.( codPrograma => {
-				return maestroProgramas.datos?.find?.(p => p.id === codPrograma)?.nombre || codPrograma;
+				return maestroProgramas.porId(codPrograma).nombre || codPrograma;
 			}) || [];
 		}
 	}
-	const [seleccionProgramas, setSeleccionProgramas] = useState(programasSelecccionados);
-	const [modoFiltroProgramas, setModoFiltroProgramas] = useState(modoFiltroActualPrograma);
-	useEffect(() => {
+	const [seleccionProgramas, setSeleccionProgramas] = React.useState(programasSelecccionados);
+	const [modoFiltroProgramas, setModoFiltroProgramas] = React.useState(modoFiltroActualPrograma);
+	React.useEffect(() => {
 		if (seleccionProgramas.length && modoFiltroProgramas) {
 			refFiltro.current[RUTA_NODO_PROGRAMA] = {
 				[modoFiltroProgramas]: seleccionProgramas.map(programa => {
 					if (parseInt(programa) || typeof programa === 'number') return parseInt(programa);
-					return (maestroProgramas.datos?.find?.(p => p.nombre === programa))?.id
+					return (maestroProgramas.porNombre(programa)).id
 				})
 			};
 		} else {
 			delete refFiltro.current[RUTA_NODO_PROGRAMA];
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [seleccionProgramas, modoFiltroProgramas])
+	}, [seleccionProgramas, modoFiltroProgramas, refFiltro, maestroProgramas])
 
 
-	return <BoxFiltro relleno={seleccionIps?.length || seleccionProgramas.length.length} modoFiltro="$in" >
+	return <BoxFiltro relleno={seleccionIps?.length || seleccionProgramas?.length} modoFiltro="$in" >
 
 		<Typography sx={{ mb: 2 }} component="div" variant="h6">
 			Origen de la transmisión
@@ -106,7 +116,7 @@ export const OrigenPedido = ({ refFiltro }) => {
 			</Grid>
 			<Grid item xs={12} md={8}>
 				<ControlTextoChip
-					opciones={maestroProgramas.datos?.map(programa => programa.nombre)}
+					opciones={maestroProgramas.getNombres()}
 					valor={seleccionProgramas}
 					onChange={setSeleccionProgramas}
 					label="Programa de farmacia"
