@@ -53,7 +53,7 @@ export const OrigenPedido = ({ refFiltro }) => {
 	}, [seleccionIps, modoFiltroIps])
 
 	let maestroProgramas = useSelector(selectMaestroProgramas);
-	console.log(maestroProgramas);
+	
 
 	const nodoPrograma = refFiltro?.current?.[RUTA_NODO_PROGRAMA];
 	let modoFiltroActualPrograma = MODOS[0].id;

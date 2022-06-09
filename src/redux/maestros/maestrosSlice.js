@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 
 import API from 'api/api';
@@ -18,7 +18,7 @@ export const cargarMaestros = createAsyncThunk('maestros/cargarMaestros',
 		let promesas = TIPOS_DE_MAESTROS.map(tipo => API(redux).monitor.consultaMaestro(tipo))
 		let respuestas = await Promise.allSettled(promesas)
 
-		
+
 		let nuevoEstado = {};
 		respuestas.forEach((resultado, i) => {
 			let nombreMaestro = TIPOS_DE_MAESTROS[i];
@@ -54,7 +54,7 @@ export const cargarMaestros = createAsyncThunk('maestros/cargarMaestros',
 export const consultaMaestrosSlice = createSlice({
 	name: 'maestros',
 	initialState: {
-		estados: { datos: [], estado: 'incial', mensajes: null},
+		estados: { datos: [], estado: 'incial', mensajes: null },
 		programas: { datos: [], estado: 'incial', mensajes: null },
 		laboratorios: { datos: [], estado: 'incial', mensajes: null },
 		almacenes: { datos: [], estado: 'incial', mensajes: null },
@@ -67,7 +67,7 @@ export const consultaMaestrosSlice = createSlice({
 	extraReducers: (builder) => {
 		builder
 			.addCase(cargarMaestros.pending, (state) => {
-				TIPOS_DE_MAESTROS.forEach( tipo => {
+				TIPOS_DE_MAESTROS.forEach(tipo => {
 					state[tipo].estado = 'cargando'
 					state[tipo].mensajes = null
 				})
@@ -78,7 +78,7 @@ export const consultaMaestrosSlice = createSlice({
 				})
 			})
 			.addCase(cargarMaestros.rejected, (state, action) => {
-				
+
 			});
 	},
 });
@@ -121,11 +121,37 @@ export const selectMaestroTipos = createSelector([_selectTipos], (tipos) => {
  */
 export const CargaMaestros = React.memo(() => {
 	const dispatch = useDispatch();
+	const maestros = useSelector(state => state.maestros);
+	const refTempo = React.useRef(null);
+
 	React.useEffect(() => {
 		dispatch(cargarMaestros())
-	})
+	}, [dispatch])
+
+	React.useEffect(() => {
+		let hayQueDespachar = false
+		for (let tipo in maestros) {
+			if (maestros[tipo].estado === 'error') {
+				hayQueDespachar = true;
+			}
+		}
+
+		if (hayQueDespachar) {
+			let handler = setTimeout( () => {
+				dispatch(cargarMaestros())
+				refTempo.current = null;
+			}, 5000 )
+			refTempo.current = handler;
+		}
+
+		return () => {
+			if (refTempo.current) clearInterval(refTempo.current);
+			refTempo.current = null;
+		}
+	}, [maestros, refTempo, dispatch])
+
 	return null;
-}, () => true)
+}, () => false)
 
 
 export default consultaMaestrosSlice.reducer;

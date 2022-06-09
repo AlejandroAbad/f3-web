@@ -21,6 +21,23 @@ class MaestroAlmacenes {
 		if (valor) return valor;
 		return generarValorDesconocido(id)
 	}
+
+	porNombre(nombre) {
+		let valor = this.#datos.find(e => e.nombre === nombre)
+		if (valor) return valor;
+		return generarValorDesconocido(0)
+	}
+
+	/**
+	 * Retorna un array con los nombres de los almacenes
+	 */
+	getNombres() {
+		return this.#datos.map(v => v.nombre)
+	}
+
+	tieneDatos() {
+		return this.#datos.length > 0;
+	}
 }
 
 export default MaestroAlmacenes;

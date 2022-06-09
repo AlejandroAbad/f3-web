@@ -63,14 +63,16 @@ const RUTA_NODO_TIPO = 'pedido.tipoPedido';
 export const DatosPedido = ({ refFiltro }) => {
 
 	const maestroAlmacenes = useSelector(selectMaestroAlmacenes);
+console.log(maestroAlmacenes);
+
 	const nodoAlmacenes = refFiltro?.current?.[RUTA_NODO_ALMACEN];
 	let modoFiltroActualAlmacenes = MODOS[0].id;
 	let almacenesSeleccionados = [];
 	if (nodoAlmacenes) {
 		modoFiltroActualAlmacenes = obtenerModoDeFiltro(nodoAlmacenes, MODOS) || MODOS[0].id
-		if (maestroAlmacenes.datos) {
+		if (maestroAlmacenes.tieneDatos()) {
 			almacenesSeleccionados = Object.values(nodoAlmacenes)?.[0]?.map?.(codAlmacen => {
-				return maestroAlmacenes.datos?.find?.(p => p.id === codAlmacen)?.nombre || codAlmacen;
+				return maestroAlmacenes.porId(codAlmacen)?.nombre || codAlmacen;
 			}) || [];
 		}
 	}
@@ -81,7 +83,7 @@ export const DatosPedido = ({ refFiltro }) => {
 			refFiltro.current[RUTA_NODO_ALMACEN] = {
 				[modoFiltroAlmacen]: seleccionAlmacen.map(almacen => {
 					if (/^RG[0-9]$/i.test(almacen)) return almacen;
-					return (maestroAlmacenes.datos?.find?.(a => a.nombre === almacen))?.id
+					return (maestroAlmacenes.porNombre(almacen))?.id
 				})
 			};
 		} else {
@@ -129,7 +131,7 @@ export const DatosPedido = ({ refFiltro }) => {
 			<Grid item xs={12} md={7}>
 				<ControlTextoChip
 					opcionesFijas
-					opciones={maestroAlmacenes.datos?.map(almacen => almacen.nombre)}
+					opciones={maestroAlmacenes.getNombres()}
 					valor={seleccionAlmacen}
 					onChange={setSeleccionAlmacen}
 					label="Almacén"
