@@ -20,7 +20,7 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 
 // REDUX
 import { useDispatch, useSelector } from 'react-redux';
-import { consultarPedidos, selectFiltro, setFiltro } from 'redux/consultas/pedidosSlice';
+import { listarPedidos, selectFiltro, setFiltro } from 'redux/consultas/pedidosSlice';
 
 // SUBCOMPONENTES
 import FormularioFiltroPedidosEstandard from './formulario/FormularioFiltroPedidosEstandard';
@@ -53,7 +53,7 @@ export default function BotonFiltrosPedido() {
 
 	const aplicarCambiosYCerrarDialogo = () => {
 		dispatch(setFiltro(EJSON.serialize(refFiltro.current)));
-		dispatch(consultarPedidos());
+		dispatch(listarPedidos());
 		setDialogoAbierto(false);
 	}
 

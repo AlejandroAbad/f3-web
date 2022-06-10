@@ -1,9 +1,10 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button, Stack, Typography } from "@mui/material"
 import ControlModoFiltro, { obtenerModoDeFiltro } from "common/componentes/ControlModoFiltro";
 import { AddCircleOutline, PauseCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
-import ContextoMaestros from "contexto/contextoMaestros";
 import BoxFiltro from "./BoxFiltro";
+import { selectMaestroEstados } from "redux/maestros/maestrosSlice";
+import { useSelector } from "react-redux";
 
 
 const MODOS = [
@@ -52,14 +53,12 @@ const BotonEstado = ({ estados, seleccionActual, setSeleccionActual, color, chil
 
 export const EstadoTransmision = ({ refFiltro }) => {
 
-	const { maestroEstados } = useContext(ContextoMaestros);
-	let estadosRelevantes = maestroEstados?.datos?.filter?.(estado => {
-		return !estado.ambito || estado.ambito === "PEDIDO"
-	}) || [];
+	const maestroEstados = useSelector(selectMaestroEstados);
+	let estadosRelevantes = maestroEstados.porAmbito('PEDIDO')
 
 
 	const nodo = refFiltro?.current?.[RUTA_NODO];
-	
+
 	let modoFiltroActual = MODOS[0].id;
 	let estadosSeleccionados = [];
 	if (nodo) {

@@ -25,6 +25,24 @@ class MaestroEstados {
 		if (valor) return valor;
 		return generarValorDesconocido(id)
 	}
+
+	tieneDatos() {
+		return this.#datos.length > 0;
+	}
+
+	porAmbito(ambito) {
+		return this.#datos.filter(estado => {
+			return !estado.ambito || estado.ambito === ambito
+		});
+	}
+
+	get cargando() {
+		return this.#estado === 'cargando'
+	}
+
+	get error() {
+		return this.#estado === 'error'
+	}
 }
 
 export default MaestroEstados;

@@ -21,6 +21,18 @@ class MaestroLaboratorios {
 		if (valor) return valor;
 		return generarValorDesconocido(id)
 	}
+
+	tieneDatos() {
+		return this.#datos.length > 0;
+	}
+
+	get cargando() {
+		return this.#estado === 'cargando'
+	}
+
+	get error() {
+		return this.#estado === 'error'
+	}
 }
 
 export default MaestroLaboratorios;

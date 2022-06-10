@@ -38,6 +38,14 @@ class MaestroAlmacenes {
 	tieneDatos() {
 		return this.#datos.length > 0;
 	}
+
+	get cargando() {
+		return this.#estado === 'cargando'
+	}
+
+	get error() {
+		return this.#estado === 'error'
+	}
 }
 
 export default MaestroAlmacenes;

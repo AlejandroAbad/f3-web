@@ -9,7 +9,7 @@ import MenuList from '@mui/material/MenuList';
 
 // REDUX
 import { useSelector, useDispatch } from 'react-redux';
-import { consultarPedidos, setLimite } from 'redux/consultas/pedidosSlice';
+import { listarPedidos, setLimite } from 'redux/consultas/pedidosSlice';
 
 const OPCIONES_POR_DEFECTO = [];
 
@@ -35,7 +35,7 @@ export default function BotonLimiteResultados({ opciones, ...props }) {
 
 	const cambiaElementoSeleccionado = (_, index) => {
 		dispatch(setLimite(index));
-		if (estado !== 'cargando') dispatch(consultarPedidos())
+		if (estado !== 'cargando') dispatch(listarPedidos())
 		setMenuAbierto(false);
 	};
 

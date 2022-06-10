@@ -5,7 +5,8 @@ import tokenReducer from 'redux/token/tokenSlice';
 import tokenPermananteReducer from 'redux/herramientas/tokenPermanenteSlice';
 import pantallaSlice from 'redux/pantalla/pantallaSlice';
 import consultaPedidosReducer from 'redux/consultas/pedidosSlice'
-import maestrosSlice from './maestros/maestrosSlice';
+import maestrosSlice from 'redux/maestros/maestrosSlice';
+import consultaTransmisionesSlice from 'redux/consultas/transmisionesSlice';
 
 const loadState = () => {
 	try {
@@ -39,7 +40,8 @@ export const store = configureStore({
 			tokenPermanente: tokenPermananteReducer
 		}),
 		consultas: combineReducers({
-			pedidos: consultaPedidosReducer
+			pedidos: consultaPedidosReducer,
+			transmisiones: consultaTransmisionesSlice
 		}),
 		maestros: maestrosSlice
 	},

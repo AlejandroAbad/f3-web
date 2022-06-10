@@ -10,7 +10,7 @@ import Box from "@mui/material/Box";
 
 // REDUX 
 import { useSelector, useDispatch } from "react-redux";
-import { consultarPedidos, setPagina, setVista } from "redux/consultas/pedidosSlice";
+import { listarPedidos, setPagina, setVista } from "redux/consultas/pedidosSlice";
 
 // SUBCOMPONENTES
 import BotonFiltrosPedido from "./BotonFiltrosPedido";
@@ -33,7 +33,7 @@ export default function ControlNavegacionPedidos() {
 	
 	const fnCambiarPagina = (_, pagina) => {
 		dispatch(setPagina(pagina));
-		if (estado !== 'cargando') dispatch(consultarPedidos())
+		if (estado !== 'cargando') dispatch(listarPedidos())
 	}	
 
 

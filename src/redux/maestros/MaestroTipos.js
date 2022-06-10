@@ -22,6 +22,13 @@ class MaestroTipos {
 		if (valor) return valor;
 		return generarValorDesconocido(id)
 	}
+	get cargando() {
+		return this.#estado === 'cargando'
+	}
+
+	get error() {
+		return this.#estado === 'error'
+	}
 }
 
 export default MaestroTipos;

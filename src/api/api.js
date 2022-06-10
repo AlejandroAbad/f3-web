@@ -3,8 +3,9 @@ import { logout } from 'redux/token/tokenSlice';
 
 import { authenticate } from 'api/fedicom/authenticate';
 import { generarTokenPermanente, obtenerTokenObservador } from 'api/monitor/tokens';
-import { listadoPedidos } from './monitor/listadoPedidos';
+import { listadoPedidos, consultaPedido } from './monitor/listadoPedidos';
 import { consultaMaestro } from './monitor/consultaMaestros';
+import { listadoTransmisiones, consultaTransmision } from './monitor/listadoTransmisiones';
 
 
 const API = function (redux) {
@@ -16,6 +17,9 @@ const API = function (redux) {
 			obtenerTokenObservador: () => obtenerTokenObservador(redux),
 			generarTokenPermanente: (usuario, dominio) => generarTokenPermanente(redux, usuario, dominio),
 			listadoPedidos: (filtro, proyeccion, orden, skip, limite) => listadoPedidos(redux, filtro, proyeccion, orden, skip, limite),
+			consultaPedido: (idPedido) => consultaPedido(redux, idPedido),
+			listadoTransmisiones: (filtro, proyeccion, orden, skip, limite) => listadoTransmisiones(redux, filtro, proyeccion, orden, skip, limite),
+			consultaTransmision: (idTransmision, tipoConsulta) => consultaTransmision(redux, idTransmision, tipoConsulta),
 			consultaMaestro: (tipo, id) => consultaMaestro(redux, tipo, id)
 		},
 	}

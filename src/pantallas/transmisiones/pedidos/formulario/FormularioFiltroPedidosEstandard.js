@@ -4,7 +4,7 @@ import Grid from "@mui/material/Grid";
 import CodigoCliente from "./CodigosCliente";
 import CodigoSolicitante from "./CodigoSolicitante";
 import DatosPedido from "./DatosPedido";
-// import EstadoTransmision from "./EstadoTransmision";
+import EstadoTransmision from "./EstadoTransmision";
 import NumeroPedido from "./NumeroPedido";
 import OrigenPedido from "./OrigenPedido";
 import RangoFechas from "./RangoFechas";
@@ -24,9 +24,9 @@ export default function FormularioFiltroPedidosEstandard({ refFiltro }) {
 				<Grid item xs={12}>
 					<NumeroPedido refFiltro={refFiltro} />
 				</Grid>
-				{/*<Grid item xs={12}>
+				<Grid item xs={12}>
 					<EstadoTransmision refFiltro={refFiltro} />
-				</Grid>	*/}
+				</Grid>
 			</Grid>
 		</Grid>
 

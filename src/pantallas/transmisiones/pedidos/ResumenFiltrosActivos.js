@@ -5,7 +5,7 @@ import format from "date-fns/format";
 import { useSelector } from "react-redux";
 import { selectFiltro } from "redux/consultas/pedidosSlice";
 import { ObjectId } from "bson";
-import { selectMaestroProgramas } from "redux/maestros/maestrosSlice";
+import { selectMaestroAlmacenes, selectMaestroEstados, selectMaestroProgramas } from "redux/maestros/maestrosSlice";
 
 
 function Simbolo({ color, simbolo }) {
@@ -61,7 +61,7 @@ function valoresATexto(valor, conversor) {
 
 
 
-function textoDeFiltro(filtros, clave, maestroProgramas) {
+function textoDeFiltro(filtros, clave, { maestroProgramas, maestroAlmacenes, maestroEstados }) {
 
 	let filtro = filtros[clave];
 	let modo = Object.keys(filtro)[0];
@@ -70,14 +70,14 @@ function textoDeFiltro(filtros, clave, maestroProgramas) {
 	switch (clave) {
 		case 'pedido.codigoCliente': return <>Código del cliente {textoDeModo(modo, valor)} {valoresATexto(valor)}</>
 		case 'pedido.crcSap': return <>CRC {textoDeModo(modo, valor)} {valoresATexto(valor, (v) => v.toString(16))}</>
-		case 'pedido.crc': return <>Número de pedido Fedicom {textoDeModo(modo, valor)} {valoresATexto(valor, (v) => v.toString().toUpperCase()) }</>
+		case 'pedido.crc': return <>Número de pedido Fedicom {textoDeModo(modo, valor)} {valoresATexto(valor, (v) => v.toString().toUpperCase())}</>
 		case 'pedido.pedidosAsociadosSap': return <>Número de pedido en SAP {textoDeModo(modo, valor)} {valoresATexto(valor)}</>
 		case 'pedido.numeroPedidoOrigen': return <>Número de pedido origen {textoDeModo(modo, valor)} {valoresATexto(valor)}</>
-		case 'estado': return <>Estado del pedido {textoDeModo(modo, valor)} {valoresATexto(valor)}</>
+		case 'estado': return <>Estado del pedido {textoDeModo(modo, valor)} {valoresATexto(valor, v => maestroEstados.porId(v).nombre)}</>
 		case 'conexion.metadatos.ip': return <>IP de origen {textoDeModo(modo, valor)} {valoresATexto(valor)}</>
 		case 'conexion.metadatos.programa': return <>Programa de farmacia {textoDeModo(modo, valor)} {valoresATexto(valor, v => maestroProgramas.porId(v).nombre)}</>
 		case 'conexion.metadatos.autenticacion.usuarioNormalizado': return <>Solicitante del pedido {textoDeModo(modo, valor)} {valoresATexto(valor)}</>
-		case 'pedido.codigoAlmacenServicio': return <>Almacén de servicio {textoDeModo(modo, valor)} {valoresATexto(valor)}</>
+		case 'pedido.codigoAlmacenServicio': return <>Almacén de servicio {textoDeModo(modo, valor)} {valoresATexto(valor, v => maestroAlmacenes.porId(v).nombre)}</>
 		case 'pedido.tipoPedido': return <>Tipo del pedido {textoDeModo(modo, valor)} {valoresATexto(valor)}</>
 		case 'fechaCreacion': {
 
@@ -92,8 +92,10 @@ function textoDeFiltro(filtros, clave, maestroProgramas) {
 export default function ResumenFiltrosActivos() {
 
 	let filtros = useSelector(selectFiltro);
-	
+
 	let maestroProgramas = useSelector(selectMaestroProgramas);
+	let maestroAlmacenes = useSelector(selectMaestroAlmacenes);
+	let maestroEstados = useSelector(selectMaestroEstados);
 
 	let listaFiltros = null;
 	let clavesDeFiltro = Object.keys(filtros);
@@ -101,7 +103,7 @@ export default function ResumenFiltrosActivos() {
 
 
 	listaFiltros = clavesDeFiltro.map(clave => <ListItem disablePadding key={clave}>
-		<ListItemText primary={textoDeFiltro(filtros, clave, maestroProgramas)} />
+		<ListItemText primary={textoDeFiltro(filtros, clave, { maestroProgramas, maestroAlmacenes, maestroEstados })} />
 	</ListItem>
 	)
 

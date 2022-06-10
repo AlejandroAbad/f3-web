@@ -1,4 +1,4 @@
-import {  useContext, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import { ControlTextoChip } from "common/componentes/ControlTextoChip";
 import ControlModoFiltro, { obtenerModoDeFiltro } from "common/componentes/ControlModoFiltro";
 import { AddCircleOutline, PauseCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
@@ -63,7 +63,6 @@ const RUTA_NODO_TIPO = 'pedido.tipoPedido';
 export const DatosPedido = ({ refFiltro }) => {
 
 	const maestroAlmacenes = useSelector(selectMaestroAlmacenes);
-console.log(maestroAlmacenes);
 
 	const nodoAlmacenes = refFiltro?.current?.[RUTA_NODO_ALMACEN];
 	let modoFiltroActualAlmacenes = MODOS[0].id;

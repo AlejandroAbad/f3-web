@@ -3,14 +3,27 @@ import { endOfDay, startOfDay } from 'date-fns';
 
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 import API from 'api/api';
+import ModeloPedido from "./ModeloPedido";
 
-export const consultarPedidos = createAsyncThunk('consultas/pedidos/consultarPedidos',
+export const listarPedidos = createAsyncThunk('consultas/pedidos/listarPedidos',
 	async (_, redux) => {
 
 		let { filtro, proyeccion, orden, skip, limite } = redux.getState().consultas.pedidos;
 
 		try {
 			let respuesta = await API(redux).monitor.listadoPedidos(filtro, proyeccion, orden, skip, limite);
+			return redux.fulfillWithValue(respuesta);
+		} catch (error) {
+			let mensaje = API.generarErrorFetch(error);
+			return redux.rejectWithValue(mensaje);
+		}
+	}
+);
+
+export const consultaPedido = createAsyncThunk('consultas/pedidos/consultaPedido',
+	async ({ idPedido }, redux) => {
+		try {
+			let respuesta = await API(redux).monitor.consultaPedido(idPedido);
 			return redux.fulfillWithValue(respuesta);
 		} catch (error) {
 			let mensaje = API.generarErrorFetch(error);
@@ -32,7 +45,12 @@ export const consultaPedidosSlice = createSlice({
 		vista: 'compacto',
 		resultado: null,
 		estado: 'inicial',
-		mensajes: null
+		mensajes: null,
+		pedidoActual: {
+			resultado: null,
+			estado: 'inicial',
+			mensajes: null
+		}
 	},
 	reducers: {
 		setLimite: (state, action) => {
@@ -54,18 +72,32 @@ export const consultaPedidosSlice = createSlice({
 
 	extraReducers: (builder) => {
 		builder
-			.addCase(consultarPedidos.pending, (state) => {
+			.addCase(listarPedidos.pending, (state) => {
 				state.estado = 'cargando';
 				state.mensajes = null;
 			})
-			.addCase(consultarPedidos.fulfilled, (state, action) => {
+			.addCase(listarPedidos.fulfilled, (state, action) => {
 				state.resultado = action.payload;
 				state.estado = 'completado';
 				state.mensajes = null;
 			})
-			.addCase(consultarPedidos.rejected, (state, action) => {
+			.addCase(listarPedidos.rejected, (state, action) => {
 				state.estado = 'error';
 				state.mensajes = action.payload;
+			})
+
+			.addCase(consultaPedido.pending, (state) => {
+				state.pedidoActual.estado = 'cargando';
+				state.pedidoActual.mensajes = null;
+			})
+			.addCase(consultaPedido.fulfilled, (state, action) => {
+				state.pedidoActual.resultado = action.payload;
+				state.pedidoActual.estado = 'completado';
+				state.pedidoActual.mensajes = null;
+			})
+			.addCase(consultaPedido.rejected, (state, action) => {
+				state.pedidoActual.estado = 'error';
+				state.pedidoActual.mensajes = action.payload;
 			});
 	},
 });
@@ -78,6 +110,11 @@ export const selectFiltro = createSelector([_selectFiltro], (filtro) => {
 	return null;
 })
 
+const _selectPedido = (state) => state.consultas.pedidos.pedidoActual.resultado;
+export const selectPedido = createSelector([_selectPedido], (pedido) => {
+	if (pedido) return new ModeloPedido(pedido);
+	return null;
+})
 
 export const { setLimite, setVista, setPagina, setFiltro } = consultaPedidosSlice.actions;
 

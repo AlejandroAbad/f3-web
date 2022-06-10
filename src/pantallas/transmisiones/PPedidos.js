@@ -1,5 +1,3 @@
-
-
 import React from "react";
 import useNavegacion from "hooks/useNavegacion";
 import { convertirErrorLlamadaFedicom } from "common/FediCommons";
@@ -22,27 +20,30 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 // REDUX
 import { usePantalla } from "redux/pantalla/pantallaSlice";
-import { consultarPedidos } from "redux/consultas/pedidosSlice";
+import { listarPedidos } from "redux/consultas/pedidosSlice";
 import { useSelector, useDispatch } from "react-redux";
 
 // SUBCOMPONENTES
 import ControlNavegacionPedidos from "./pedidos/ControlNavegacionPedidos";
 import ResumenFiltrosActivos from "./pedidos/ResumenFiltrosActivos";
+import LineaNavegadorPedido from "./pedidos/listado/LineaNavegadorPedido";
+import ContenedorDetallePedido from "./pedidos/detalle/ContenedorDetallePedido";
 
 
 
 function PantallaPedidos() {
 
 	const dispatch = useDispatch();
-	usePantalla('Pedidos', 'pedidos');
 	let [idPedido, setIdPedido] = useNavegacion('/transmisiones/pedidos', 3);
+	usePantalla(idPedido ? 'Pedido ' + idPedido : 'Pedidos', 'pedidos');
+
 	let { resultado, estado, mensajes } = useSelector(state => state.consultas.pedidos);
 
 	let estaCargando = estado === 'cargando';
 	let estaError = estado === 'error';
-	
+
 	React.useEffect(() => {
-		if (estado === 'inicial' && !idPedido) dispatch(consultarPedidos())
+		if (estado === 'inicial' && !idPedido) dispatch(listarPedidos())
 	}, [estado, idPedido, dispatch])
 
 	let contenido = null;
@@ -51,7 +52,7 @@ function PantallaPedidos() {
 	if (estaCargando) {
 		contenido = <Paper elevation={3} sx={{ mt: 4, py: 4, px: 4, textAlign: 'center' }}>
 			<CircularProgress />
-			<Typography component="div" variant="h6">Solicitando token</Typography>
+			<Typography component="div" variant="h6">Buscando pedidos</Typography>
 		</Paper>
 	} else if (estaError) {
 		contenido = <Box>
@@ -79,8 +80,8 @@ function PantallaPedidos() {
 			<Box sx={{ position: 'sticky', top: '190px' }}>
 				{eleResumenFiltros}
 				<List sx={{ mt: 2 }} >
-					{/*<LineaNavegadorPedido.Cabecera />*/}
-					{resultado.resultados.map(pedido => <div key={pedido._id}>{pedido._id}</div> /*<LineaNavegadorPedido key={pedido._id} pedido={pedido} />*/)}
+					<LineaNavegadorPedido cabecera />
+					{resultado.resultados.map(pedido => <LineaNavegadorPedido key={pedido._id} pedido={pedido} />)}
 				</List>
 			</Box>
 
@@ -88,7 +89,7 @@ function PantallaPedidos() {
 	}
 
 	return (<>
-		<Container fixed maxWidth="xl">
+		<Container fixed maxWidth="xl" >
 			{contenido}
 		</Container>
 		<Dialog
@@ -108,7 +109,7 @@ function PantallaPedidos() {
 				</Toolbar>
 			</AppBar>
 			<Box sx={{ mt: 12 }}>
-				{/*<PantallaVisorPedidosFedicom3 idPedido={idPedidoSeleccionado} />*/}
+				<ContenedorDetallePedido idPedido={idPedido} />
 			</Box>
 		</Dialog>
 	</>)
