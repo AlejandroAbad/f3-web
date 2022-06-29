@@ -63,10 +63,8 @@ const MenuNavegacionLineas = ({ cambiaEstadoMenu, menuFiltroAbierto, refMenuFilt
 						</ClickAwayListener>
 					</Paper>
 				</Popper>
-
-				<BotonLimiteResultados limite={resultadosPorPagina} cambiaLimite={setResultadosPorPagina} />
+				<BotonLimiteResultados  />
 			</Box>
-
 
 			{totalPaginas > 1 &&
 				<Box sx={{ width: '33%', display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>

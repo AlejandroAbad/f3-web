@@ -1,8 +1,8 @@
 import llamadaFedicom from "./apiFedicom";
 
 
-export const authenticate = async (redux, ususario, password, dominio = 'HEFAME', debug = true) => {
-	let respuesta = await llamadaFedicom(redux, 'post', '/authenticate', {
+export const authenticate = async (redux, abortController, ususario, password, dominio = 'HEFAME', debug = true) => {
+	let respuesta = await llamadaFedicom(redux, abortController, 'post', '/authenticate', {
 		user: ususario,
 		password,
 		domain: dominio,

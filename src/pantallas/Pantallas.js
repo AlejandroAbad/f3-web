@@ -3,6 +3,7 @@ import PantallaPrincipal from './PPrincipal';
 import PantallaTokens from './herramientas/PTokens';
 import PantallaPedidos from './transmisiones/PPedidos';
 import PantallaDevoluciones from './transmisiones/PDevoluciones';
+import PantallaSimulacionPedidos from './herramientas/simuladores/pedido/PSimulacionPedido';
 
 
 const Pantallas = {
@@ -13,7 +14,11 @@ const Pantallas = {
 		Devoluciones: PantallaDevoluciones
 	},
 	Herramientas: {
-		Tokens: PantallaTokens
+		Tokens: PantallaTokens,
+		Simuladores: {
+			Pedidos: PantallaSimulacionPedidos
+		}
+
 	}
 }
 

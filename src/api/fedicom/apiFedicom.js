@@ -1,13 +1,18 @@
 
-const llamadaFedicom = async (redux, metodo, url, body) => {
+const llamadaFedicom = async (redux, abortController, metodo, url, body, cabeceras) => {
 
 	let urlFedicom = redux.getState().api.urlFedicom;
 	let jwt = redux.getState().token.jwt;
+	if (!cabeceras) cabeceras = {}
 	let opciones = {
 		method: metodo,
-		headers: { 'content-type': 'application/json' }
+		headers: { 
+			...cabeceras,
+			'content-type': 'application/json' 
+		}
 	}
 
+	if (abortController) opciones.signal = abortController.signal;
 	if (body) opciones.body = JSON.stringify(body);
 	if (jwt) opciones.headers['authorization'] = 'Bearer ' + jwt;
 

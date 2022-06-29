@@ -3,8 +3,8 @@ import llamadaMonitor from "api/monitor/apiMonitor";
 
 
 
-export const obtenerTokenObservador = async (redux) => {
-	let respuesta = await llamadaMonitor(redux, 'get', '/token');
+export const obtenerTokenObservador = async (redux, abortController) => {
+	let respuesta = await llamadaMonitor(redux, abortController, 'get', '/token');
 	let json = await respuesta.json();
 	if (json.auth_token) {
 		return {
@@ -16,9 +16,9 @@ export const obtenerTokenObservador = async (redux) => {
 	}
 }
 
-export const generarTokenPermanente = async (redux, usuario, dominio) => {
+export const generarTokenPermanente = async (redux, abortController, usuario, dominio) => {
 
-	let respuesta = await llamadaMonitor(redux, 'post', '/token', {
+	let respuesta = await llamadaMonitor(redux, abortController, 'post', '/token', {
 		usuario,
 		dominio
 	});

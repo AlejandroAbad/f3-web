@@ -20,7 +20,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 // REDUX
 import { usePantalla } from "redux/pantalla/pantallaSlice";
-import { listarPedidos } from "redux/consultas/pedidosSlice";
+import { abortarPeticion, listarPedidos } from "redux/consultas/pedidosSlice";
 import { useSelector, useDispatch } from "react-redux";
 
 // SUBCOMPONENTES
@@ -28,6 +28,7 @@ import ControlNavegacionPedidos from "./pedidos/ControlNavegacionPedidos";
 import ResumenFiltrosActivos from "./pedidos/ResumenFiltrosActivos";
 import LineaNavegadorPedido from "./pedidos/listado/LineaNavegadorPedido";
 import ContenedorDetallePedido from "./pedidos/detalle/ContenedorDetallePedido";
+import { Button } from "@mui/material";
 
 
 
@@ -50,10 +51,15 @@ function PantallaPedidos() {
 	let eleResumenFiltros = <ResumenFiltrosActivos />
 	let eleControlNavegacionVacio = <ControlNavegacionPedidos />;
 	if (estaCargando) {
-		contenido = <Paper elevation={3} sx={{ mt: 4, py: 4, px: 4, textAlign: 'center' }}>
-			<CircularProgress />
-			<Typography component="div" variant="h6">Buscando pedidos</Typography>
-		</Paper>
+		contenido = <Box>
+			{eleControlNavegacionVacio}
+			{eleResumenFiltros}
+			<Paper elevation={3} sx={{ mt: 4, py: 4, px: 4, textAlign: 'center' }}>
+				<CircularProgress />
+				<Typography component="div" variant="h6">Buscando pedidos</Typography>
+				<Button onClick={() => dispatch(abortarPeticion())}>Cancelar consulta</Button>
+			</Paper>
+		</Box>
 	} else if (estaError) {
 		contenido = <Box>
 			{eleControlNavegacionVacio}

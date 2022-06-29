@@ -1,10 +1,7 @@
 import React from 'react';
 
 import './App.css';
-import 'react-toastify/dist/ReactToastify.css';
-
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
-import { ToastContainer } from 'react-toastify';
 
 // MUI
 import CssBaseline from '@mui/material/CssBaseline';
@@ -45,17 +42,7 @@ function App() {
 			<Router>
 				<div sx={{ display: 'flex' }}>
 					<CssBaseline />
-					<ToastContainer position="bottom-left"
-						autoClose={5000}
-						hideProgressBar={false}
-						newestOnTop={false}
-						closeOnClick={false}
-						rtl={false}
-						pauseOnFocusLoss={false}
-						draggable
-						pauseOnHover
-					/>
-
+					
 					{usuario && <DrawerLateral abierto={drawerAbierto} fnCerrar={() => fnMostrarDrawerLateral(false)} fnAbrir={() => fnMostrarDrawerLateral(true)} />}
 					<BarraSuperior onMenuLateralClick={fnMostrarDrawerLateral} />
 
@@ -66,6 +53,7 @@ function App() {
 								<Route path="/transmisiones/pedidos/*" element={<Pantallas.Transmisiones.Pedidos />} />
 								<Route path="/transmisiones/devoluciones" element={<Pantallas.Transmisiones.Devoluciones />} />
 								<Route path="/herramientas/tokens" element={<Pantallas.Herramientas.Tokens />} />
+								<Route path="/herramientas/simuladores/pedidos" element={<Pantallas.Herramientas.Simuladores.Pedidos />} />
 							</Routes >
 						}
 					</Box>

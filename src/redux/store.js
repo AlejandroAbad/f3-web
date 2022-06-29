@@ -3,10 +3,11 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import apiReducer from 'redux/api/apiSlice';
 import tokenReducer from 'redux/token/tokenSlice';
 import tokenPermananteReducer from 'redux/herramientas/tokenPermanenteSlice';
-import pantallaSlice from 'redux/pantalla/pantallaSlice';
+import pantallaReducer from 'redux/pantalla/pantallaSlice';
 import consultaPedidosReducer from 'redux/consultas/pedidosSlice'
-import maestrosSlice from 'redux/maestros/maestrosSlice';
-import consultaTransmisionesSlice from 'redux/consultas/transmisionesSlice';
+import maestrosReducer from 'redux/maestros/maestrosSlice';
+import consultaTransmisionesReducer from 'redux/consultas/transmisionesSlice';
+import simuladorPedidosReducer from 'redux/herramientas/simuladorPedidosSlice';
 
 const loadState = () => {
 	try {
@@ -35,15 +36,16 @@ export const store = configureStore({
 	reducer: {
 		api: apiReducer,
 		token: tokenReducer,
-		pantalla: pantallaSlice,
+		pantalla: pantallaReducer,
 		herramientas: combineReducers({
-			tokenPermanente: tokenPermananteReducer
+			tokenPermanente: tokenPermananteReducer,
+			simuladorPedidos: simuladorPedidosReducer
 		}),
 		consultas: combineReducers({
 			pedidos: consultaPedidosReducer,
-			transmisiones: consultaTransmisionesSlice
+			transmisiones: consultaTransmisionesReducer
 		}),
-		maestros: maestrosSlice
+		maestros: maestrosReducer
 	},
 	preloadedState: loadState()
 });

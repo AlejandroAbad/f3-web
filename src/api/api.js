@@ -6,39 +6,47 @@ import { generarTokenPermanente, obtenerTokenObservador } from 'api/monitor/toke
 import { listadoPedidos, consultaPedido } from './monitor/listadoPedidos';
 import { consultaMaestro } from './monitor/consultaMaestros';
 import { listadoTransmisiones, consultaTransmision } from './monitor/listadoTransmisiones';
+import { crearPedido } from './fedicom/pedidos';
 
 
-const API = function (redux) {
+const API = function (R, A) {
 	return {
 		fedicom: {
-			authenticate: (usuario, password, dominio = 'HEFAME', debug = true) => authenticate(redux, usuario, password, dominio, debug)
+			authenticate: (usuario, password, dominio = 'HEFAME', debug = true) => authenticate(R, A, usuario, password, dominio, debug),
+			crearPedido: (usuario, dominio, pedido) => crearPedido(R, A, usuario, dominio, pedido)
 		},
 		monitor: {
-			obtenerTokenObservador: () => obtenerTokenObservador(redux),
-			generarTokenPermanente: (usuario, dominio) => generarTokenPermanente(redux, usuario, dominio),
-			listadoPedidos: (filtro, proyeccion, orden, skip, limite) => listadoPedidos(redux, filtro, proyeccion, orden, skip, limite),
-			consultaPedido: (idPedido) => consultaPedido(redux, idPedido),
-			listadoTransmisiones: (filtro, proyeccion, orden, skip, limite) => listadoTransmisiones(redux, filtro, proyeccion, orden, skip, limite),
-			consultaTransmision: (idTransmision, tipoConsulta) => consultaTransmision(redux, idTransmision, tipoConsulta),
-			consultaMaestro: (tipo, id) => consultaMaestro(redux, tipo, id)
+			obtenerTokenObservador: () => obtenerTokenObservador(R, A),
+			generarTokenPermanente: (usuario, dominio) => generarTokenPermanente(R, A, usuario, dominio),
+			listadoPedidos: (filtro, proyeccion, orden, skip, limite) => listadoPedidos(R, A, filtro, proyeccion, orden, skip, limite),
+			consultaPedido: (idPedido) => consultaPedido(R, A, idPedido),
+			listadoTransmisiones: (filtro, proyeccion, orden, skip, limite) => listadoTransmisiones(R, A, filtro, proyeccion, orden, skip, limite),
+			consultaTransmision: (idTransmision, tipoConsulta) => consultaTransmision(R, A, idTransmision, tipoConsulta),
+			consultaMaestro: (tipo, id) => consultaMaestro(R, A, tipo, id)
 		},
 	}
 }
 
 
 
-const ERROR_NO_TOKEN = [
+export const ERROR_NO_HAY_TOKEN = [
 	{
 		codigo: 'AUTH-001',
 		descripcion: 'Necesaria autenticación'
 	}
 ]
 
+export const PETICION_CANCELADA = [
+	{
+		codigo: 'CANCEL-001',
+		descripcion: 'Consulta cancelada por petición del usuario'
+	}
+]
 
 export const verificaAutenticacion = (redux, respuesta) => {
 	if (!respuesta || respuesta.status === 401) {
 		redux.dispatch(logout('La sesión no es válida.'));
-		throw ERROR_NO_TOKEN;
+		throw ERROR_NO_HAY_TOKEN;
 	}
 }
 

@@ -44,11 +44,11 @@ const botones = [
 	{ texto: "Herramientas", esTitulo: true },
 	{
 		texto: "Simuladores", icono: NearMe, subMenu: [
-			{ texto: "Pedidos", icono: LocalGroceryStoreIcon, link: '/' },
-			{ texto: "Devoluciones", icono: KeyboardReturnIcon, link: '/' },
-			{ texto: "Logística", icono: LocalShippingIcon, link: '/' },
-			{ texto: "Albaranes", icono: ReceiptLongIcon, link: '/' },
-			{ texto: "Test de stress", icono: Security, link: '/' },
+			{ texto: "Pedidos", icono: LocalGroceryStoreIcon, link: '/herramientas/simuladores/pedidos' },
+			{ texto: "Devoluciones", icono: KeyboardReturnIcon, link: '/herramientas/simuladores/devoluciones' },
+			{ texto: "Logística", icono: LocalShippingIcon, link: '/herramientas/simuladores/logistica' },
+			{ texto: "Albaranes", icono: ReceiptLongIcon, link: '/herramientas/simuladores/albaranes' },
+			{ texto: "Test de stress", icono: Security, link: '/herramientas/simuladores/stress' },
 		]
 	},
 	{

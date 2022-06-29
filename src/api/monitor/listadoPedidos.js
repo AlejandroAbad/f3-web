@@ -4,9 +4,9 @@ import llamadaMonitor from "api/monitor/apiMonitor";
 
 
 
-export const listadoPedidos = async (redux, filtro, proyeccion, orden, skip, limite) => {
+export const listadoPedidos = async (redux, abortController, filtro, proyeccion, orden, skip, limite) => {
 
-	let respuesta = await llamadaMonitor(redux, 'put', '/consulta/pedidos', {
+	let respuesta = await llamadaMonitor(redux, abortController, 'put', '/consulta/pedidos', {
 		filtro,
 		proyeccion,
 		orden,
@@ -20,8 +20,8 @@ export const listadoPedidos = async (redux, filtro, proyeccion, orden, skip, lim
 
 }
 
-export const consultaPedido = async (redux, idPedido) => {
-	let respuesta = await llamadaMonitor(redux, 'get', '/consulta/pedidos/' + idPedido);
+export const consultaPedido = async (redux, abortController, idPedido) => {
+	let respuesta = await llamadaMonitor(redux, abortController, 'get', '/consulta/pedidos/' + idPedido);
 	verificaAutenticacion(redux, respuesta);
 
 	let json = await respuesta.json();

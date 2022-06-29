@@ -8,7 +8,6 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 export default function InfoLineaPedido({ linea, almacenOriginal }) {
 
-
 	const [desplegado, setDesplegado] = useState(false);
 
 	let tieneIncidencias = linea.incidencias?.length > 0 || false;
@@ -82,7 +81,6 @@ export default function InfoLineaPedido({ linea, almacenOriginal }) {
 	}
 	if (!linea.descripcionArticulo) {
 		eleChips.push(<Chip size="small" key="faltasNoDisponibles" variant="outlined" label="NO SAP" color="warning" />)
-		linea.descripcionArticulo = <Typography sx={{ fontStyle: 'italic', color: 'text.disabled' }}>DESCRIPCIÓN NO DISPONIBLE</Typography>
 		cantidadServida = 0;
 	} else {
 		cantidadSolicitada = 0;
@@ -101,7 +99,7 @@ export default function InfoLineaPedido({ linea, almacenOriginal }) {
 					}
 				</TableCell>
 				<TableCell sx={{ width: 460 }}>
-					<Typography component="div">{linea.descripcionArticulo}</Typography>
+					<Typography component="div">{linea.descripcionArticulo || <Typography sx={{ fontStyle: 'italic', color: 'text.disabled' }}>DESCRIPCIÓN NO DISPONIBLE</Typography>}</Typography>
 					<Typography component="div" sx={{ fontWeight: 'bold' }}>{linea.codigoArticulo}</Typography>
 				</TableCell>
 				<TableCell sx={{ width: 120 }}>

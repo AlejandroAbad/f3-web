@@ -1,21 +1,38 @@
 import { EJSON } from "bson";
 import { endOfDay, startOfDay } from 'date-fns';
-
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
-import API from 'api/api';
+
+import API, { PETICION_CANCELADA } from 'api/api';
+import ControladorPeticiones from "api/ControladorPeticiones";
 import ModeloPedido from "./ModeloPedido";
+
+
+const cntrlListados = new ControladorPeticiones();
+
+
 
 export const listarPedidos = createAsyncThunk('consultas/pedidos/listarPedidos',
 	async (_, redux) => {
 
 		let { filtro, proyeccion, orden, skip, limite } = redux.getState().consultas.pedidos;
 
+		cntrlListados.abortarTodo({ silencio: true });
+		let [idControlador, controlador] = cntrlListados.generarControlador();
+		
 		try {
-			let respuesta = await API(redux).monitor.listadoPedidos(filtro, proyeccion, orden, skip, limite);
+			let respuesta = await API(redux, controlador).monitor.listadoPedidos(filtro, proyeccion, orden, skip, limite);
 			return redux.fulfillWithValue(respuesta);
+
 		} catch (error) {
+			let razonAborto = cntrlListados.haSidoAbortado(idControlador);
+			console.log('RAZON ABORTO', razonAborto);
+			if (razonAborto) return redux.rejectWithValue(razonAborto);
+
 			let mensaje = API.generarErrorFetch(error);
 			return redux.rejectWithValue(mensaje);
+
+		} finally {
+			cntrlListados.descartar(idControlador);
 		}
 	}
 );
@@ -67,6 +84,10 @@ export const consultaPedidosSlice = createSlice({
 		setFiltro: (state, action) => {
 			state.skip = 0;
 			state.filtro = action.payload;
+		},
+		abortarPeticion: (state, action) => {
+			let motivo = action.payload ? action.payload : PETICION_CANCELADA;
+			cntrlListados.abortarTodo(motivo)
 		}
 	},
 
@@ -82,6 +103,7 @@ export const consultaPedidosSlice = createSlice({
 				state.mensajes = null;
 			})
 			.addCase(listarPedidos.rejected, (state, action) => {
+				if (action.payload.silencio) return;
 				state.estado = 'error';
 				state.mensajes = action.payload;
 			})
@@ -116,6 +138,6 @@ export const selectPedido = createSelector([_selectPedido], (pedido) => {
 	return null;
 })
 
-export const { setLimite, setVista, setPagina, setFiltro } = consultaPedidosSlice.actions;
+export const { setLimite, setVista, setPagina, setFiltro, abortarPeticion } = consultaPedidosSlice.actions;
 
 export default consultaPedidosSlice.reducer;
