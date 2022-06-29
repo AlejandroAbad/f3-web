@@ -8,7 +8,8 @@ const llamadaFedicom = async (redux, abortController, metodo, url, body, cabecer
 		method: metodo,
 		headers: { 
 			...cabeceras,
-			'content-type': 'application/json' 
+			'content-type': 'application/json',
+			'software-id': '9001'
 		}
 	}
 

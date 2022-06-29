@@ -5,7 +5,10 @@ const llamadaMonitor = async (redux, abortController, metodo, url, body) => {
 	let jwt = redux.getState().token.jwt;
 	let opciones = {
 		method: metodo,
-		headers: { 'content-type': 'application/json' }
+		headers: {
+			'content-type': 'application/json',
+			'software-id': '9001'
+		}
 	}
 
 	if (abortController) opciones.signal = abortController.signal;
