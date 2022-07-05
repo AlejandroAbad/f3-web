@@ -35,12 +35,12 @@ export default function SelectorDatosCabecera({ refFormulario }) {
 		refFormulario.current.numeroPedidoOrigen = numeroPedidoOrigen;
 	}
 
-	const setTipoPedido = (numeroPedidoOrigen) => {
-		refFormulario.current.numeroPedidoOrigen = numeroPedidoOrigen;
+	const setTipoPedido = (tipoPedido) => {
+		refFormulario.current.tipoPedido = tipoPedido;
 	}
 
 	const setAlmacen = (almacen) => {
-		refFormulario.current.almacen = almacen;
+		refFormulario.current.codigoAlmacenServicio = almacen;
 	}
 
 
